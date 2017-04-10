@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['rocky-tor-79281.herokuapp.com']
+ALLOWED_HOSTS = ['gentle-waters-68807.herokuapp.com']
 
 
 # Application definition
