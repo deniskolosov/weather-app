@@ -138,6 +138,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'assets'),
 )
 
+
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'bundles/',
