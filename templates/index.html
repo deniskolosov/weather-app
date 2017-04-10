@@ -1,14 +1,14 @@
 {% load render_bundle from webpack_loader %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Weather</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
 </head>
 <body>
-<div id="root">
+<div id="root"></div>
 {% render_bundle "main" %}
-
-</div>
 </body>
 </html>

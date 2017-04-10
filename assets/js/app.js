@@ -1,10 +1,40 @@
-var React = require('react')
-var ReactDOM = require('react-dom')
+var React = require('react');
+var ReactDOM = require('react-dom');
 var BarChart = require("react-chartjs").Bar;
+var Table = require('react-bootstrap').Table;
 
+class WeatherTable extends React.Component {
+    render() {
+        return (
+            <Table responsive>
+                <thead>
+                <tr>
+                    <th>Minimum temperature</th>
+                    <th>Maximum temperature</th>
+                    <th>Average temperature</th>
+                    <th>Average humidity</th>
+                </tr>
+                </thead>
+                <tbody>
+                {this.props.weatherData.map((dayData, index) => {
+                        const weatherList = dayData["datasets"][0]["data"];
+                        return (
+                            <tr key={index}>
+                                {weatherList.map(d => <td>{d}</td>)}
+                            </tr>
+                        )
+                    })
+                    }
+                </tbody>
+            </Table>
+        )
+    }
+}
 
 class Bar extends React.Component {
     render () {
+        const chartData = this.props.data
+        chartData["datasets"][0]["data"].pop();
     return <BarChart data={this.props.data} options={this.props.options} width="600" height="250"/>
 }
 }
@@ -42,7 +72,7 @@ class FetchData extends React.Component {
                     const weatherList = [dayData["min_temp"],
                         dayData["max_temp"], dayData["avg_temp"], dayData["humidity"]];
                     return {
-                        labels: ["Min. Temp", "Max. Temp", "Avg. Temp", "Hum"],
+                        labels: ["Min. Temp", "Max. Temp", "Avg. Temp"],
                         datasets: [{
                             label: `Weather data on ${dayData['date']}`,
                             backgroundColor: [
@@ -90,20 +120,27 @@ class FetchData extends React.Component {
     render() {
 
         return (
-            <div>
+            <div className="container col-md-offset-4 col-md-4">
                 <form onSubmit={this.handleSubmit}>
-                    <label>
-                        City:
+                    <div className="form-group">
+                        <label htmlFor="cityInp">
+                            City:
+                        </label>
                         <input
                             name="city"
                             type="text"
-                            onChange={this.handleInputChange} />
-                    </label>
-                    <br />
-                    <label>
-                        Choose period:
+                            id="cityInp"
+                            className="form-control"
+                            onChange={this.handleInputChange}>
+                        </input>
+                    </div>
+                    <div className="form-group">
+                        <label>
+                            Choose period in days:
+                        </label>
                         <select name="period"
                                 value={this.state.value}
+                                className="form-control"
                                 onChange={this.handleInputChange}>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -111,28 +148,18 @@ class FetchData extends React.Component {
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
-                    </label>
-                    <input type="submit" value="Submit" />
+                    </div>
+                    <input className="btn btn-primary" type="submit" value="Submit" />
                 </form>
-                <h1>Fetched data:</h1>
-                <table>
-                    <tr>
-                        <th>Minimum temperature</th>
-                        <th>Maximum temperature</th>
-                        <th>Average temperature</th>
-                        <th>Average humidity</th>
-                    </tr>
-                    {this.state.data.map((dayData, index) => {
-                        const weatherList = dayData["datasets"][0]["data"];
-                        return (
-                            <tr key={index}>
-                                {weatherList.map(d => <td>{d}</td>)}
-                            </tr>
-                        )
-                    })
-                    }
-                </table>
-                {this.BarChartItems(this.state.data)}
+                { this.state.data.length > 0 ? (
+                        <div>
+                            <p className="h3">Fetched data:</p>
+                            <WeatherTable weatherData={this.state.data}/>
+                            {this.BarChartItems(this.state.data)}
+                        </div>
+                    ) :
+                    (<p className="h4">Please, choose city to fetch weather</p>)
+                }
             </div>
         );
     }

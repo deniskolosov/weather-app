@@ -19,25 +19,52 @@ module.exports = {
 
     plugins: [
         //tells webpack where to store data about your bundles.
-        new BundleTracker({filename: './webpack-stats.json'})
+        new BundleTracker({filename: './webpack-stats.json'}),
+        new webpack.ProvidePlugin({
+            jQuery: 'jquery',
+            $: 'jquery',
+            jquery: 'jquery'
+        })
     ],
 
     module: {
         loaders: [
-            //a regexp that tells webpack use the following loaders on all
-            //.js and .jsx files
             {
-                test: /\.jsx?$/,
-                //we definitely don't want babel to transpile all the files in
-                //node_modules. That would take a long time.
-                exclude: /node_modules/,
-                //use the babel loader
+                test: /.jsx?$/,
                 loader: 'babel-loader',
+                exclude: /node_modules/,
                 query: {
-                    //specify that we will be dealing with React code
-                    presets: ['react']
+                    presets: ['es2015', 'react']
                 }
             },
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader"
+            },
+            {
+                test: /\.png$/,
+                loader: "url-loader?limit=100000"
+            },
+            {
+                test: /\.jpg$/,
+                loader: "file-loader"
+            },
+            {
+                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+            },
+            {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader'
+            },
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+            }
         ]
     },
 
