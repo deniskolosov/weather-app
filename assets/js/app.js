@@ -27,7 +27,6 @@ class FetchData extends React.Component {
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        console.log("val:" + value + " name: " + name);
 
         this.setState({
             [name]: value
